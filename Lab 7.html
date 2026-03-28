@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Events</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .changeColour {
+                width: 400px;
+                height: 400px;
+                background-color: aqua;
+            }
+            .bgcolor {
+                background-color: rgb(76, 76, 240);
+            }
+        </style>
+    </head>
+    <body>
+        <p class="increment">0</p>
+        <button id="incrementbtn">Increment Button</button>
+        <div class="changeColour"></div>
+        <form action="#" id="myForm">
+            <label for="name">Name:</label>
+            <input type="name" name="name"><br>
+            <label for="email" name="email">Email:</label>
+            <input type="email" name="email" id="email">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+        <p class="timer">This text will change after 5 seconds</p>
+
+        <a href="www.google.com" id="transfer_link">Google</a>
+        <script>
+            const changeColour = document.querySelector('.changeColour');
+
+            changeColour.addEventListener('mouseover', ()=>{
+                changeColour.classList.toggle("bgcolor")
+            });
+
+            var number = 0;
+            const increment_element = document.querySelector('.increment');
+            const incrementbtn = document.querySelector('#incrementbtn');
+
+            incrementbtn.addEventListener('click', ()=>{
+                number = number + 1;
+                increment_element.innerHTML = number;
+            });
+
+            const email = document.querySelector("#email");
+            const myForm = document.querySelector("#myForm");
+            myForm.addEventListener("submit", ()=>{
+                const emailval = email.value;
+
+                if(!emailval.includes('@')) {
+                    alert("Email not correct");
+                    event.preventDefault();
+                }
+            });
+
+            const timer_ele = document.querySelector('.timer');
+
+            setTimeout(()=> {
+                timer_ele.textContent = 'My content has changed';
+            }, 5000);
+
+            const transfer_link = document.querySelector('#transfer_link');
+            transfer_link.addEventListener('click', ()=>{
+                event.preventDefault();
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>DOM Manipulation</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <ul id="list">
+            <li>James</li>
+            <li>John</li>
+        </ul><br>
+        <button class="togglebtn">Toggle paragraph visibility</button>
+        <p class="paragraph">I am an element that must loss</p>
+
+        <form>
+            <label for="name">Name:</label>
+            <input name="name" id="update_div">
+        </form>
+
+        <div>
+            <p><b>Welcome <i id="name_bearer"></i> to this page.</b></p>
+        </div>
+
+        <script>
+            const p = document.createElement("p");
+            p.style.color = "red";
+            p.textContent = "Hello World";
+
+            document.body.appendChild(p);
+
+            const listt = document.querySelector("#list");
+            const newli = document.createElement("li");
+            newli.textContent = "Matthew";
+
+            listt.appendChild(newli);
+
+            const para = document.querySelector(".paragraph");
+            const togglebtn = document.querySelector(".togglebtn");
+            togglebtn.addEventListener("click", ()=> {
+                para.classList.toggle("hidden");
+            });
+
+            const update_div = document.querySelector('#update_div');
+            const name_bearer = document.querySelector("#name_bearer");
+
+            update_div.addEventListener('keyup', () =>{
+                name_bearer.innerHTML = update_div.value;
+            });
+
+            try {
+                const patrol = document.querySelector("#patrol");
+                patrol.innerHTML = "Hello World";
+            } catch {
+                console.log("There's an error");
+            } 
+        </script>
+    </body>
+</html>

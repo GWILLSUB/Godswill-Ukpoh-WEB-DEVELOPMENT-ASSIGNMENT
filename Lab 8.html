@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List App</title>
+    <style>
+       body{
+        background: linear-gradient(270deg, purple, blue);
+       }
+       .container {
+        display: grid;
+       }
+       h1{
+        color: white;
+       }
+       input {
+        width: 200px;
+        height: 50px;
+        outline: none;
+        border: none;
+        background-color: aliceblue;
+        border-radius: 20px;
+        padding: 10px;
+       }
+       button {
+        margin: 10px;
+        width: 80px;
+        height: 50px;
+        outline: none;
+        border: none;
+        background-color: black;
+        border-radius: 20px;
+        padding: 10px;
+        color: white;
+       }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Todo List</h1>
+        
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="Add a new task..." />
+            <button id="addBtn">Add</button>
+        </div>
+
+        <ul id="taskList"></ul>
+        
+        <div id="emptyState" class="empty-state" style="display: none;">
+            
+        </div>
+
+        <div class="stats">
+            <span id="totalTasks"></span>
+            <span id="completedTasks"></span>
+        </div>
+    </div>
+
+    <script>
+        class TodoApp {
+            constructor() {
+                this.tasks = [];
+                this.init();
+            }
+
+            init() {
+               
+                this.loadTasks();
+                
+                document.getElementById('addBtn').addEventListener('click', () => this.addTask());
+                document.getElementById('taskInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.addTask();
+                });
+
+              
+                this.debugWrongId();
+            }
+
+            
+            debugWrongId() {
+                
+                try {
+                    const wrongElement = document.getElementById('taskList');
+                    console.log("Debug challenge: Find the bug in the code!");
+                } catch (error) {
+                    console.error("Bug found:", error);
+                }
+            }
+
+            loadTasks() {
+                const saved = localStorage.getItem('todoTasks');
+                if (saved) {
+                    this.tasks = JSON.parse(saved);
+                }
+                this.render();
+            }
+
+            saveTasks() {
+                localStorage.setItem('todoTasks', JSON.stringify(this.tasks));
+            }
+
+            addTask() {
+                const input = document.getElementById('taskInput');
+                const text = input.value.trim();
+                
+                if (text === '') {
+                    input.style.borderColor = '#ff4757';
+                    setTimeout(() => {
+                        input.style.borderColor = '#e0e0e0';
+                    }, 1000);
+                    return;
+                }
+
+                const task = {
+                    id: Date.now(),
+                    text: text,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                };
+
+                this.tasks.push(task);
+                this.saveTasks();
+                this.render();
+                
+                input.value = '';
+                input.focus();
+            }
+
+            deleteTask(id) {
+                this.tasks = this.tasks.filter(task => task.id !== id);
+                this.saveTasks();
+                this.render();
+            }
+
+            toggleTask(id) {
+                const task = this.tasks.find(t => t.id === id);
+                if (task) {
+                    task.completed = !task.completed;
+                    this.saveTasks();
+                    this.render();
+                }
+            }
+
+            render() {
+                const list = document.getElementById('taskList');
+                const emptyState = document.getElementById('emptyState');
+                
+                list.innerHTML = '';
+
+                if (this.tasks.length === 0) {
+                    emptyState.style.display = 'block';
+                } else {
+                    emptyState.style.display = 'none';
+                    
+                    this.tasks.forEach(task => {
+                        const li = document.createElement('li');
+                        
+                        const taskContent = document.createElement('div');
+                        taskContent.className = 'task-content';
+                        
+                        const checkbox = document.createElement('div');
+                        checkbox.className = `checkbox ${task.completed ? 'checked' : ''}`;
+                        checkbox.onclick = () => this.toggleTask(task.id);
+                        
+                        const span = document.createElement('span');
+                        span.className = `task-text ${task.completed ? 'completed' : ''}`;
+                        span.textContent = task.text;
+                        span.onclick = () => this.toggleTask(task.id);
+                        
+                        taskContent.appendChild(checkbox);
+                        taskContent.appendChild(span);
+                        
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'delete-btn';
+                        deleteBtn.textContent = 'Delete';
+                        deleteBtn.onclick = () => this.deleteTask(task.id);
+                        
+                        li.appendChild(taskContent);
+                        li.appendChild(deleteBtn);
+                        list.appendChild(li);
+                    });
+                }
+
+                
+                const total = this.tasks.length;
+                const completed = this.tasks.filter(t => t.completed).length;
+                document.getElementById('totalTasks').textContent = `Total: ${total}`;
+                document.getElementById('completedTasks').textContent = `Completed: ${completed}`;
+            }
+        }
+
+        const app = new TodoApp();
+
+        console.log("%c🔧 Debug Challenge!", "color: #667eea; font-size: 20px; font-weight: bold;");
+        console.log("%cThere's an intentional bug in this code. Try to find it!", "color: #ff4757;");
+        console.log("%cHint: Check the CSS for #wrongId", "color: #764ba2;");
+        console.log("Available debug commands:");
+        console.log("- app.tasks: View all tasks");
+        console.log("- app.addTask(): Add a task programmatically");
+        console.log("- localStorage.getItem('todoTasks'): View raw storage");
+    </script>
+</body>
+</html>
+

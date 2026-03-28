@@ -1,0 +1,15 @@
+body {
+    background: linear-gradient(to left, rgb(243, 243, 131), rgb(121, 121, 252));
+    font-family: Arial, sans-serif;
+}
+
+p {
+    color: white;
+    font-size: 20px;
+}
+
+#newdiv {
+    border: 1px solid salmon;
+    margin: 1px;
+    padding: 10px;
+}
